@@ -1,5 +1,5 @@
 from pydantic import BaseModel, EmailStr
-from typing import Optional
+from typing import Optional, List
 from datetime import datetime
 
 # User schemas
@@ -16,7 +16,7 @@ class User(UserBase):
     updated_at: Optional[datetime] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class Token(BaseModel):
     access_token: str
@@ -47,5 +47,14 @@ class Student(StudentBase):
     created_at: datetime
     updated_at: Optional[datetime] = None
 
+    class Config:
+        from_attributes = True
+
+class PaginatedStudentResponse(BaseModel):
+    total: int
+    page: int
+    page_size: int
+    items: List[Student]
+    
     class Config:
         orm_mode = True 

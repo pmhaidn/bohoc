@@ -85,4 +85,8 @@ curl -X POST "http://localhost:8000/api/v1/students/" \
     "phone": "1234567890",
     "address": "123 Main St"
   }'
-``` 
+```
+### DEPLOY
+```bash
+gcloud run deploy bohoc --source . --env-vars-file env.yaml --region asia-southeast1 --allow-unauthenticated
+```

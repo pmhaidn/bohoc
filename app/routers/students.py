@@ -6,6 +6,7 @@ from ..core.database import get_db
 from ..models import models
 from ..schemas import schemas
 from .auth import get_current_user
+from math import ceil
 
 router = APIRouter()
 
@@ -39,15 +40,34 @@ def create_student(
                 detail="A student with this information already exists"
             )
 
-@router.get("/", response_model=List[schemas.Student])
+@router.get("/", response_model=schemas.PaginatedStudentResponse)
 def read_students(
-    skip: int = 0,
-    limit: int = 100,
+    page: int = 1,
+    page_size: int = 10,
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user)
 ):
-    students = db.query(models.Student).offset(skip).limit(limit).all()
-    return [schemas.Student.from_orm(student) for student in students]
+    # Đảm bảo page và page_size hợp lệ
+    if page < 1:
+        page = 1
+    if page_size < 1:
+        page_size = 10
+    
+    # Tính toán skip
+    skip = (page - 1) * page_size
+    
+    # Lấy tổng số học sinh
+    total = db.query(models.Student).count()
+    
+    # Lấy danh sách học sinh theo trang
+    students = db.query(models.Student).offset(skip).limit(page_size).all()
+    
+    return {
+        "total": total,
+        "page": page,
+        "page_size": page_size,
+        "items": [schemas.Student.from_orm(student) for student in students]
+    }
 
 @router.get("/{student_id}", response_model=schemas.Student)
 def read_student(
