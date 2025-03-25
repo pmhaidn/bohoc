@@ -1,0 +1,10 @@
+buildpacks:
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    version: latest
+  - name: gcr.io/buildpacks/python
+    version: v1
+    env:
+      - name: PIP_NO_CACHE_DIR
+        value: "false"
+      - name: PIP_PREFER_BINARY
+        value: "true" 
