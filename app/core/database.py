@@ -22,8 +22,9 @@ engine = create_engine(
     DATABASE_URL,
     connect_args={
         "sslmode": "require",
-        "connect_timeout": 10,
-        "application_name": "student_management"
+        "connect_timeout": 30,
+        "application_name": "student_management",
+        "options": "-c statement_timeout=60000"  # 60 seconds
     },
     pool_pre_ping=True,
     pool_size=5,

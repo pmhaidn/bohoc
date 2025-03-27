@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from .core.config import settings
 from .core.database import engine, get_db
 from .models import models
-from .routers import auth, students
+from .routers import auth, students, classes
 from .core.security import get_password_hash
 from sqlalchemy.orm import Session
 
@@ -28,6 +28,7 @@ app.add_middleware(
 # Include routers
 app.include_router(auth.router, prefix=settings.API_V1_STR + "/auth", tags=["auth"])
 app.include_router(students.router, prefix=settings.API_V1_STR + "/students", tags=["students"])
+app.include_router(classes.router, prefix=settings.API_V1_STR + "/classes", tags=["classes"])
 
 # Create default admin user
 def create_default_admin():
@@ -37,7 +38,8 @@ def create_default_admin():
         admin = models.User(
             username="admin",
             hashed_password=get_password_hash("admin"),
-            is_active=True
+            is_active=True,
+            role=models.UserRole.ADMIN
         )
         db.add(admin)
         db.commit()

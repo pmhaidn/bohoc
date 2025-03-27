@@ -1,4 +1,4 @@
-#!/Users/phanhai/Documents/project/bohoc/bohoc/.venv/bin/python
+#!/Users/mac/projects/bohoc/.venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
